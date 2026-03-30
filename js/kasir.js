@@ -1,47 +1,35 @@
-let cart = []
+let cart=[]
 
 async function tambah(){
-  const kode = document.getElementById("barcode").value
+  const kode = barcode.value
 
-  const res = await api("getProduk", { kode })
-
-  if(!res.data) return alert("Barang tidak ada")
+  const res = await api("getProduk",{kode})
 
   cart.push({
     kode,
     nama: res.data.nama,
     harga: res.data.harga,
-    qty: 1
+    qty:1
   })
 
   render()
 }
 
 function render(){
-  let html = ""
-  let total = 0
+  let html="", total=0
 
-  cart.forEach((item,i)=>{
-    const sub = item.qty * item.harga
-    total += sub
-
-    html += `
-      <tr>
-        <td>${item.nama}</td>
-        <td>${item.qty}</td>
-        <td>${sub}</td>
-      </tr>
-    `
+  cart.forEach(i=>{
+    const sub=i.qty*i.harga
+    total+=sub
+    html+=`<tr><td>${i.nama}</td><td>${i.qty}</td><td>${sub}</td></tr>`
   })
 
-  document.getElementById("cart").innerHTML = html
-  document.getElementById("total").innerText = total
+  document.getElementById("cart").innerHTML=html
+  document.getElementById("total").innerText=total
 }
 
 async function bayar(){
-  await api("penjualan", { items: cart })
-
-  alert("Transaksi sukses")
-  cart = []
+  await api("penjualan",{items:cart})
+  cart=[]
   render()
 }
